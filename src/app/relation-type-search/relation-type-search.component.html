@@ -1,0 +1,10 @@
+<div>
+    <input type="text" value="" name="word" (input)="updateData($event.target.value)">
+    <button type="button" (click)="getRelationsType()">Search</button>
+  </div>
+  
+  <div class="btn-group" *ngFor="let relation of RelationsNames">
+
+      <button type="button">{{relation.desc}}</button>
+   
+  </div>
