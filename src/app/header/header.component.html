@@ -1,0 +1,27 @@
+<mat-toolbar color="primary">
+    <div class="logo">
+        Jeux de mots
+      <!-- <img src="/assets/img/logo.png"> -->
+    </div>
+    <ul>
+      <li>
+        <a mat-button routerLink="/create" routerLinkActive="mat-accent"
+          >Search a word !</a
+        >
+      </li>
+      <li *ngIf="!userIsAuthentificated">
+        <a mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
+      </li>
+      <li *ngIf="!userIsAuthentificated">
+        <a mat-stroked-button routerLink="/signup" routerLinkActive="mat-accent"
+          >Signup</a
+        >
+      </li>
+      <li *ngIf="userIsAuthentificated">
+        <button mat-stroked-button (click)="onLogout()">
+          Logout
+        </button>
+      </li>
+    </ul>
+  </mat-toolbar>
+  
