@@ -12,7 +12,10 @@ var qs = require('querystring');
 const shell = require('shelljs');
 const { currentId } = require('async_hooks');
 const app = express();
+const NodeCache = require( "node-cache" );
+const myCache = new NodeCache({stdTTL: 100, checkperiod: 120});
 app.use(express.json());
+
 
 var corsOptions = {
   origin: 'http://localhost:4200',
@@ -34,13 +37,23 @@ app.listen(8888);
 
 app.get("/getRelationType/:word", cors(corsOptions), (req, res) => {
 
+    //check si dans le cache
+    
     // avoir les types de relations associees à un mot
 
     let word = req.params.word;
 
     console.log(word);
-  
 
+    var id_key= word+"_getRelationType";
+
+    if(myCache.has(id_key)){
+        CachedData = myCache.get(id_key);
+        res.end(JSON.stringify(CachedData));
+    }
+    else{
+
+    
     request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
       word + "&rel=?gotermsubmit=Chercher&gotermrel=" + word +
       "&rel=", {
@@ -65,8 +78,11 @@ app.get("/getRelationType/:word", cors(corsOptions), (req, res) => {
             console.log(rez);
             RelationsTypesArray.push(relationtype);
         }
+
+       
         res.end(JSON.stringify(RelationsTypesArray));
     });
+    }
 });
 
 app.get("/getRelations/:word/", cors(corsOptions), (req, res) => {
@@ -74,7 +90,15 @@ app.get("/getRelations/:word/", cors(corsOptions), (req, res) => {
   // avoir toutes les relations entrantes ou sortantes associées à ce mot 
 
   let word= req.params.word;
-  
+
+  var id_key= word+"_getRelations";
+
+    if(myCache.has(id_key)){
+        CachedData = myCache.get(id_key);
+        res.end(JSON.stringify(CachedData));
+    }
+    else{
+
   request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
     word + "&rel=?gotermsubmit=Chercher&gotermrel=" + word +
     "&rel=", {
@@ -100,16 +124,26 @@ app.get("/getRelations/:word/", cors(corsOptions), (req, res) => {
           nodesArray.push(node);
         } 
 
-      res.end(JSON.stringify(nodesArray));
-  });
+            myCache.set(id_key,nodesArray,3600);
+        res.end(JSON.stringify(nodesArray));
+        });
+    }
 });
 
 app.get("/getAssociatedNodes/:word/", cors(corsOptions), (req, res) => {
 
   // avoir les infos de tous les noeuds associés à un mot.
 
+  var id_key= word+"_getAssociatedNodes";
+
   let word= req.params.word;
-  
+
+  if(myCache.has(id_key)){
+    CachedData = myCache.get(id_key);
+    res.end(JSON.stringify(CachedData));
+    }else{
+
+
   request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
     word + "&rel=?gotermsubmit=Chercher&gotermrel=" + word +
     "&rel=", {
@@ -132,9 +166,11 @@ app.get("/getAssociatedNodes/:word/", cors(corsOptions), (req, res) => {
 
           nodesArray.push(node);
         } 
-
-      res.end(JSON.stringify(nodesArray));
-  });
+    
+        myCache.set(id_key,nodesArray,3600); // dans le cache pour une heure
+        res.end(JSON.stringify(nodesArray));
+        });
+    }
 });
 
 
@@ -180,6 +216,12 @@ app.get("/getAssociatedRelationsById/:word/:id", cors(corsOptions), (req, res) =
   let word= req.params.word;
   let id = req.params.id;
 
+  var id_key=word+"_"+id+"_getAssociatedRelationsById";
+
+  if(myCache.has(id_key)){
+    CachedData = myCache.get(id_key);
+    res.end(JSON.stringify(CachedData));
+    }else{
 
   request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
     word + "&rel=?gotermsubmit=Chercher&gotermrel=" + word +
@@ -206,7 +248,9 @@ app.get("/getAssociatedRelationsById/:word/:id", cors(corsOptions), (req, res) =
             nodesArray.push(node);
         } 
       }
+      myCache.set(id_key,nodesArray,3600);
       res.end(JSON.stringify(nodesArray));
-  });
+        });
+    }
 });
 
