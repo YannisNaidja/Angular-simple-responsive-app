@@ -1,3 +1,30 @@
+
+mat-card {
+    display: flex;
+    flex-flow: column;
+    width: 80%;
+    margin: auto;
+    margin-top: 1em;
+}
+
+h1.title {
+    margin: auto;
+    margin-top: 1em;
+}
+
+mat-card > input {
+    width: 80%;
+    margin: auto;
+    margin-top: 2em;
+}
+
+mat-card > button {
+    max-width: fit-content;
+    min-width: 4em;
+    margin: auto;
+    margin-top: 1em;
+}
+
 .btn-group button {
     background-color: #4CAF50; /* Green background */
     border: 1px solid green; /* Green border */
