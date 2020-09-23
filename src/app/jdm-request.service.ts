@@ -32,13 +32,19 @@ export class JdmRequestService {
 
     // trouver un noeud associé au mot recherche via son id 
 
-    getNodebyId(word: string, id: string) {
+    getNodebyId(word: string, id: string): Observable<any> {
         return this.http.get(this.servUrl + "getAssociatedNodeById/" + word + "/" + id);
     }
 
     // toutes les relations du mot pour un id de relation donné
 
-    getRelationsNodebyId(word: string, idRelation: string) {
+    getRelationsNodebyId(word: string, idRelation: string): Observable<any> {
         return this.http.get(this.servUrl + "getAssociatedRelationsById/" + word + "/" + idRelation);
+    }
+
+    // recuperer l'id du mot rechercher
+
+    getWordId(word:string){
+        return this.http.get(this.servUrl + "getWordId/" + word);
     }
 }

@@ -9,6 +9,7 @@ import {JdmRequestService} from './jdm-request.service';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { AngularMaterialModule } from './angular-material.module';
+import { MatTableModule } from '@angular/material'  
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { AngularMaterialModule } from './angular-material.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    MatTableModule
   ],
   providers: [JdmRequestService],
   bootstrap: [AppComponent]
