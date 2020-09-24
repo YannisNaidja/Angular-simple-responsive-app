@@ -71,6 +71,7 @@ export class RelationTypeSearchComponent implements OnInit {
     getNodesOfARelation(relationclicked){
 
         this.GetDataClicked = true;
+        this.NodesOfARelation = new Array();
 
             console.log(relationclicked);
             var relationId;
@@ -120,7 +121,7 @@ export class RelationTypeSearchComponent implements OnInit {
                     }
 
                     console.log(this.NodesOfARelation.length+" mot sont contenus dans le tab");
-                    this.resultlength = this.NodesOfARelation.length;
+                        this.resultlength = this.NodesOfARelation.length;
                    
                         this.DataReady = true;
                         this.tableDataSrc = new MatTableDataSource(this.NodesOfARelation);
