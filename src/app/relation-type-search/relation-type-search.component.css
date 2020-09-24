@@ -12,7 +12,7 @@ h1.title {
     margin-top: 1em;
 }
 
-mat-card > input {
+.search-input > input {
     width: 80%;
     margin: auto;
     margin-top: 2em;

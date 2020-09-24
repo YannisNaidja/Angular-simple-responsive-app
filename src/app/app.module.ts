@@ -9,20 +9,24 @@ import {JdmRequestService} from './jdm-request.service';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { AngularMaterialModule } from './angular-material.module';
+import { AutoCompletionPipe } from './relation-type-search/auto-completion.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     RelationTypeSearchComponent,
-    HeaderComponent
+    HeaderComponent,
+    AutoCompletionPipe
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    AngularMaterialModule
-  ],
+      BrowserModule,
+      BrowserAnimationsModule,
+      HttpClientModule,
+      AppRoutingModule,
+      ReactiveFormsModule,
+      AngularMaterialModule
+    ],
   providers: [JdmRequestService],
   bootstrap: [AppComponent]
 })

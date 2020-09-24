@@ -1,9 +1,22 @@
 <mat-card>
     <h1 class="title">Search a word</h1>
-    <input type="text" value="" name="word" (input)="updateData($event.target.value)">
+    <!-- <input type="text" value="" name="word" (input)="updateData($event.target.value)"> -->
+
+    <div class="search-input">
+        <input matInput type="text" placeholder="Search a word" [formControl]="searchedWord" 
+            [matAutocomplete]="auto" />
+        <mat-icon aria-hidden>search</mat-icon>
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let word of searchedWord | async" [value]="word.title">
+                <img aria-hidden class="search-img" [src]="word.imagePath" height="30" />
+                <span>{{ word.title }}</span>
+            </mat-option>
+        </mat-autocomplete>
+    </div>
+
     <button mat-raised-button type="button" color="accent" (click)="getRelationsType()">Search</button>
 
     <div class="btn-group" *ngFor="let relation of RelationsNames">
         <button type="button">{{relation.desc}}</button>
-    </div>    
+    </div>
 </mat-card>

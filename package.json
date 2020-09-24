@@ -24,6 +24,7 @@
     "component": "^1.1.0",
     "cors": "^2.8.5",
     "mongodb": "^3.6.2",
+    "node-cache": "^5.1.2",
     "rxjs": "~6.4.0",
     "shelljs": "^0.8.4",
     "treetagger": "^0.1.1",
