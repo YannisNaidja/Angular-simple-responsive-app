@@ -54,8 +54,42 @@ app.get("/getRelationType/:word", cors(corsOptions), (req, res) => {
     }
     else{
 
+      http.get("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
+        word + "&rel=36?gotermsubmit=Chercher&gotermrel=" + word +
+        "&rel=", (resp) => {
+          resp.setEncoding('binary');
+          let data = '';
+          resp.on('data', (chunk) => {
+            data += chunk;
+          });
+          resp.on('end', () => {
+            const regex = /(rt;[0-9]+;.*)/gm;
+        console.log(data.match(regex));
+        var relationstypes = data.match(regex);
+        var RelationsTypesArray = new Array();
+        for(var s of relationstypes){
+            //console.log(s);
+            var relationtype = {
+              id    :s.split(";")[1],
+              desc  :s.split(";")[3],
+              tips   :s.split(";")[5],
+              clicked : false     
+          };
+            var rez = s.split(";")[1]+" "+s.split(";")[3];
+            console.log(rez);
+            RelationsTypesArray.push(relationtype);
+        }
+
+        myCache.set(id_key,RelationsTypesArray,3600);
+        res.end(JSON.stringify(RelationsTypesArray));
+      });
+    });
+  }
+});
+
+
     
-    request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
+   /* request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
       word + "&rel=?gotermsubmit=Chercher&gotermrel=" + word +
       "&rel=", {
         json: true
@@ -64,7 +98,7 @@ app.get("/getRelationType/:word", cors(corsOptions), (req, res) => {
           return console.log(err);
         }
        // const regex = /((e;[0-9]+;.*)|(r;[0-9]+;.*))/m;
-       const regex = /(rt;[0-9]+;.*)/gm;
+        const regex = /(rt;[0-9]+;.*)/gm;
         console.log(body.match(regex));
         var relationstypes = body.match(regex);
         var RelationsTypesArray = new Array();
@@ -82,9 +116,8 @@ app.get("/getRelationType/:word", cors(corsOptions), (req, res) => {
 
        
         res.end(JSON.stringify(RelationsTypesArray));
-    });
-    }
-});
+    });*/
+    
 
 app.get("/getRelations/:word/", cors(corsOptions), (req, res) => {
 
@@ -100,7 +133,39 @@ app.get("/getRelations/:word/", cors(corsOptions), (req, res) => {
     }
     else{
 
-  request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
+      http.get("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
+      word + "&rel=36?gotermsubmit=Chercher&gotermrel=" + word +
+      "&rel=", (resp) => {
+        resp.setEncoding('binary');
+        let data = '';
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+        resp.on('end', () => {
+          const regex = /(r;[0-9]+;.*)/gm;
+          console.log(data.match(regex));
+          var nodes = data.match(regex);
+          var nodesArray = new Array();
+        for(var s of nodes){
+       
+          var node = {
+            idSource : s.split(";")[2],
+            idTarget : s.split(";")[3],
+            idRelationType : s.split(";")[4],
+            poidRelation : s.split(";")[5],
+            }
+            
+          nodesArray.push(node);
+        } 
+
+        myCache.set(id_key,nodesArray,3600);
+        res.end(JSON.stringify(nodesArray));
+    });
+  });
+
+      
+
+  /*request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
     word + "&rel=?gotermsubmit=Chercher&gotermrel=" + word +
     "&rel=", {
       json: true
@@ -125,9 +190,9 @@ app.get("/getRelations/:word/", cors(corsOptions), (req, res) => {
           nodesArray.push(node);
         } 
 
-            myCache.set(id_key,nodesArray,3600);
+        myCache.set(id_key,nodesArray,3600);
         res.end(JSON.stringify(nodesArray));
-        });
+        });*/
     }
 });
 
@@ -135,18 +200,50 @@ app.get("/getAssociatedNodes/:word/", cors(corsOptions), (req, res) => {
 
   // avoir les infos de tous les noeuds associés à un mot.
 
+
+  let word = req.params.word;
+
   var id_key= word+"_getAssociatedNodes";
 
-  let word= req.params.word;
+  
 
-  if(myCache.has(id_key)){
+    if(myCache.has(id_key)){
+    console.log("try cache");
     CachedData = myCache.get(id_key);
     res.end(JSON.stringify(CachedData));
     }else{
 
+      http.get("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
+      word + "&rel=36?gotermsubmit=Chercher&gotermrel=" + word +
+      "&rel=", (resp) => {
+        resp.setEncoding('binary');
+        let data = '';
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+        resp.on('end', () => {
+          const regex = /(e;[0-9]+;.*)/gm;
+          console.log(data.match(regex));
+          var nodes = data.match(regex);
+          var nodesArray = new Array();
+          for(var s of nodes){
+           
+              var node = {
+                id : s.split(";")[1],
+                name : s.split(";")[2]
+                }
+    
+              nodesArray.push(node);
+            } 
+        
+            myCache.set(id_key,nodesArray,3600); // dans le cache pour une heure
+            res.end(JSON.stringify(nodesArray));
+    });
+  });
+
 
   
-  request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
+  /*request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
     word + "&rel=?gotermsubmit=Chercher&gotermrel=" + word +
     "&rel=", {
       json: true
@@ -171,7 +268,7 @@ app.get("/getAssociatedNodes/:word/", cors(corsOptions), (req, res) => {
     
         myCache.set(id_key,nodesArray,3600); // dans le cache pour une heure
         res.end(JSON.stringify(nodesArray));
-        });
+        });*/
     }
 });
 
@@ -183,8 +280,36 @@ app.get("/getAssociatedNodeById/:word/:id", cors(corsOptions), (req, res) => {
   let word= req.params.word;
   let id = req.params.id;
 
+  http.get("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
+      word + "&rel=36?gotermsubmit=Chercher&gotermrel=" + word +
+      "&rel=", (resp) => {
+        resp.setEncoding('binary');
+        let data = '';
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+        resp.on('end', () => {
+          //const regex = /(r;[0-9]+;.*)/gm;
+          const regex = /(e;[0-9]+;.*)/gm;
+          console.log(data.match(regex));
+          var nodes = data.match(regex);
+          
+          for(var s of nodes){
+            let currentid = s.split(";")[1];
+            if(currentid===id){
+              var node = {
+                id : currentid,
+                name : s.split(";")[2]
+                }
+              res.end(JSON.stringify(node));
+            } 
+          }
+          res.end(JSON.stringify("Pas de noeud associe a ce mot pour cet id."));
+        });
+      });
 
-  request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
+
+  /*request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
     word + "&rel=?gotermsubmit=Chercher&gotermrel=" + word +
     "&rel=", {
       json: true
@@ -208,7 +333,7 @@ app.get("/getAssociatedNodeById/:word/:id", cors(corsOptions), (req, res) => {
         } 
       }
       res.end(JSON.stringify("Pas de noeud associe a ce mot pour cet id."));
-  });
+  });*/
 });
 
 app.get("/getAssociatedRelationsById/:word/:id", cors(corsOptions), (req, res) => {
@@ -225,7 +350,46 @@ app.get("/getAssociatedRelationsById/:word/:id", cors(corsOptions), (req, res) =
     res.end(JSON.stringify(CachedData));
     }else{
 
-  request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
+      http.get("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
+      word + "&rel=36?gotermsubmit=Chercher&gotermrel=" + word +
+      "&rel=", (resp) => {
+        resp.setEncoding('binary');
+        let data = '';
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+        resp.on('end', () => {
+          const regex = /(r;[0-9]+;.*)/gm;
+            console.log(data.match(regex));
+            var nodes = data.match(regex);
+            var nodesArray = new Array();
+          for(var s of nodes){
+              if(s.split(";")[4]===id){
+              var node = {
+                idSource : s.split(";")[2],
+                idTarget : s.split(";")[3],
+                idRelationType : s.split(";")[4],
+                poidRelation : s.split(";")[5]
+                }
+                nodesArray.push(node);
+              } 
+            }
+              myCache.set(id_key,nodesArray,3600);
+              res.end(JSON.stringify(nodesArray));
+        });
+      });
+    }
+  });
+
+          
+        
+
+  
+
+
+      
+
+  /*request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
     word + "&rel=?gotermsubmit=Chercher&gotermrel=" + word +
     "&rel=", {
       json: true
@@ -252,6 +416,33 @@ app.get("/getAssociatedRelationsById/:word/:id", cors(corsOptions), (req, res) =
       }
       myCache.set(id_key,nodesArray,3600);
       res.end(JSON.stringify(nodesArray));
+        });*/
+      
+app.get("/getWordId/:word", cors(corsOptions), (req, res) => {
+
+        let word= req.params.word;
+        quotedword = "'"+word+"'";
+
+        http.get("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
+      word + "&rel=36?gotermsubmit=Chercher&gotermrel=" + word +
+      "&rel=", (resp) => {
+        resp.setEncoding('binary');
+        let data = '';
+        resp.on('data', (chunk) => {
+          data += chunk;
         });
-    }
-});
+        resp.on('end', () => {
+          const regex = /(e;[0-9]+;.*)/gm;
+          console.log(data.match(regex));
+          var nodes = data.match(regex);
+          for(var s of nodes){
+            console.log("comparaison de "+s.split(";")[2]+" avec "+ word);
+            if(s.split(";")[2]===   quotedword){
+              res.end(JSON.stringify(s.split(";")[1]));
+            } 
+          }
+          res.end(JSON.stringify("id du mot non trouvee"));
+        });
+    });
+
+    });

@@ -3,23 +3,36 @@
     <input type="text" value="" name="word" (input)="updateData($event.target.value)">
     <button mat-raised-button type="button" color="accent" (click)="getRelationsType()">Search</button>
 
-    <div *ngFor="let relation of RelationsNames">
-        <button mat-raised-button type="button" color="link" (click) = getNodesOfARelation(relation.id)>{{relation.desc}}</button>
-        <div *ngIf="RelationClicked[relation.id]===true" >
-            <table mat-table [dataSource]="NodesOfARelation">
-
-                <!-- Name Column -->
-                <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef> Name </th>
-                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              </table>
-            
-              <mat-paginator [pageSize]="10"  [length]="resultsLength" [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+    <div *ngIf = "ShowSelectRelation === true">
+        <mat-form-field appearance="fill">
+            <mat-label>Choix du Type de Relation</mat-label>
+            <mat-select [(value)]="selectedValue">
+              <mat-option *ngFor="let relation of RelationsNames" [value]="relation.desc">
+                {{relation.desc}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-raised-button type="button" color="accent" (click)="getNodesOfARelation(selectedValue)">Get Data</button>
+          <p>You selected: {{selectedValue}}</p>
+          <div *ngIf="DataReady===false && GetDataClicked === true">
+            <mat-spinner ></mat-spinner>
+          </div>
         </div>
-    </div>
-
+        <div *ngIf ="DataReady===true">
+            <button mat-raised-button type="button" color="accent" (click)="showDataClick()">ShowData</button>
+        </div>
+          <div class="mat-elevation-z8" *ngIf ="ShowData===true">
+            <table mat-table [dataSource]="tableDataSrc">
+          
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+              </ng-container>
+          
+             
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSize]="30" [pageSizeOptions]="[10, 50, 100]" [length]="resultlength"></mat-paginator>
+          </div>
 </mat-card>

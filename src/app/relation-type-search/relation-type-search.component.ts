@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { JdmRequestService } from '../jdm-request.service';
+import {MatTableModule, MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from '@angular/material';
+
 
 
 @Component({
@@ -17,9 +20,17 @@ export class RelationTypeSearchComponent implements OnInit {
     private word: any;
     private wordId : any;
     displayedColumns: string[] = ['name'];
-    clicked : boolean = false;
-    resultsLength = 0;
-    private RelationClicked : boolean[] = new Array(100000);
+    private ShowSelectRelation : boolean = false;
+    private DataReady : boolean = false;
+    private GetDataClicked : boolean = false;
+    private ShowData : boolean = false;
+    private resultlength = 0;
+    private selectedValue: any;
+    tableDataSrc : any;
+    @ViewChild (MatPaginator, {static : false }) mypaginator : MatPaginator
+
+    
+    
     
 
     constructor(private jdmservice: JdmRequestService) { }
@@ -45,6 +56,11 @@ export class RelationTypeSearchComponent implements OnInit {
                     console.log("node tab update");
                     this.jdmservice.getRelations(this.word).subscribe(relations =>{
                         this.Relations = relations;
+                        this.ShowSelectRelation = true;
+                        this.DataReady = false;
+                        this.GetDataClicked = false;
+                        this.ShowData = false;
+                        
                     });
                 });	
             });
@@ -54,21 +70,27 @@ export class RelationTypeSearchComponent implements OnInit {
 
     getNodesOfARelation(relationclicked){
 
-        if(this.RelationClicked[relationclicked]===true){
-            this.RelationClicked[relationclicked]===false;
-            console.log("mis a false");
-        }else{
+        this.GetDataClicked = true;
+
+            console.log(relationclicked);
+            var relationId;
+            for(var r of this.RelationsNames){
+                if(r.desc === relationclicked)
+                    relationId = r.id;
+                    console.log("id trouvee "+relationId);
+            }
+            console.log("valeur : "+relationId)
+            
 
             // choper les relations de cette idRelation
-            this.jdmservice.getRelationsNodebyId(this.word,relationclicked).subscribe(data =>{
+            this.jdmservice.getRelationsNodebyId(this.word,relationId).subscribe(data =>{
                 console.log("recu l'id " + relationclicked);
                 this.AssociatedRelations = data;
                 var IdWordsToDisplay = new Array();
 
                 // chercher l'id du noeud avec lequel le mot est en relation et l'ajouter a un tableau 
                  for(var relation of this.AssociatedRelations){
-                     console.log("boucle 1 : comparaison de "+relation.idRelationType+ " avec "+relationclicked)
-                     if(relation.idRelationType===relationclicked){
+                     if(relation.idRelationType===relationId){
                          var IdMot;
                          if(relation.idSource!=this.wordId){
                              IdMot = relation.idSource;
@@ -78,24 +100,17 @@ export class RelationTypeSearchComponent implements OnInit {
                              IdWordsToDisplay.push(IdMot);
                          }
                          
-                         console.log("IdMot vaut "+IdMot);
+                         
                      }
                  }
                  console.log(IdWordsToDisplay.length+" id de noeuds on ete ajoutes ");
     
-            /*
-            for(var id of IdWordsToDisplay){
-                this.jdmservice.getNodebyId(this.word,id).subscribe(data =>{
-                    console.log("ajout de "+data.name);
-                    this.NodesOfARelation.push(data.name);
-                    
-                });*/
     
                 // parcourir le tableau et l ajouter a un tableau de nom pour le widget material 
                 for(var node of this.NodesOfThisWord)
                     for(var id of IdWordsToDisplay){
                         if(node.id === id){
-                            console.log("ajout de "+node.name);
+                           
                             this.NodesOfARelation.push(
                                 {
                                     name : node.name
@@ -105,9 +120,22 @@ export class RelationTypeSearchComponent implements OnInit {
                     }
 
                     console.log(this.NodesOfARelation.length+" mot sont contenus dans le tab");
-                    this.resultsLength = this.NodesOfARelation.length
+                    this.resultlength = this.NodesOfARelation.length;
+                   
+                        this.DataReady = true;
+                        this.tableDataSrc = new MatTableDataSource(this.NodesOfARelation);
+                        this.tableDataSrc.paginator = this.mypaginator;
+                        console.log("data ready mis a true");
+                            
                 });
-                this.RelationClicked[relationclicked] = true;
-                }
-            }  
-        }
+                
+            }
+
+            showDataClick(){
+                this.ShowData = true ;
+            }
+
+
+   
+}  
+        
