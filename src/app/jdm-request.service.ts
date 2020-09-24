@@ -47,4 +47,10 @@ export class JdmRequestService {
     getWordId(word:string){
         return this.http.get(this.servUrl + "getWordId/" + word);
     }
+    getIdRaff(word:string) : Observable<any>{
+        return this.http.get(this.servUrl + "getWordRel1/" + word );
+    }
+    getDef(word:string) : Observable<any>{
+        return this.http.get(this.servUrl + "getDef/" + word );
+    }
 }

@@ -17,6 +17,7 @@ export class RelationTypeSearchComponent implements OnInit {
     private NodesOfARelation: any[] = new Array();
     private NodesOfThisWord: any[] = new Array();
     private AssociatedRelations : any[] = new Array();
+    private raffTabs : any[] = new Array();
     private word: any;
     private wordId : any;
     displayedColumns: string[] = ['name'];
@@ -26,6 +27,11 @@ export class RelationTypeSearchComponent implements OnInit {
     private ShowData : boolean = false;
     private resultlength = 0;
     private selectedValue: any;
+    private RaffArray: any[] = new Array();
+    private DefArray: any[] = new Array();
+    
+
+
     tableDataSrc : any;
     @ViewChild (MatPaginator, {static : false }) mypaginator : MatPaginator
 
@@ -59,8 +65,18 @@ export class RelationTypeSearchComponent implements OnInit {
                         this.ShowSelectRelation = true;
                         this.DataReady = false;
                         this.GetDataClicked = false;
-                        this.ShowData = false;
-                        
+                        this.ShowData = false;   
+                        console.log("relation recup");
+                        this.jdmservice.getIdRaff(this.word).subscribe(raffdata =>{
+                            this.RaffArray = raffdata;
+                            console.log("idraff recup");
+                            for(var raff of this.RaffArray){
+                                this.jdmservice.getDef(raff.raff).subscribe(def =>{
+                                    this.DefArray.push(def);
+                                });
+                            }
+                            console.log("defs recup");
+                        });
                     });
                 });	
             });
@@ -135,8 +151,6 @@ export class RelationTypeSearchComponent implements OnInit {
             showDataClick(){
                 this.ShowData = true ;
             }
-
-
-   
+ 
 }  
         

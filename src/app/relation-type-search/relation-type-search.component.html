@@ -14,9 +14,9 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          
+
           <button mat-raised-button type="button" color="accent" (click)="getNodesOfARelation(selectedValue)">Get Data</button>
-          <p>You selected: {{selectedValue}}</p>
+          <p>Indication sur la relation :  {{selectedValue}}</p>
 
           <div *ngIf="DataReady===false && GetDataClicked === true">
             <mat-spinner ></mat-spinner>
@@ -38,4 +38,9 @@
 
             <mat-paginator [pageSize]="30" [pageSizeOptions]="[10, 50, 100]" [length]="resultlength" ></mat-paginator>
           
+
 </mat-card>
+
+<div *ngFor="let def of DefArray">
+    <p>{{def.value}}</p>
+</div>
