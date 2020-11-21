@@ -70,3 +70,57 @@ table {
 .mat-column-created {
   max-width: 124px;
 }
+
+
+.defcontainer > p{
+  
+}
+
+.defbtnlist{
+  display: inline;
+}
+
+.defitem{
+  text-decoration: none;
+  display: inline-block;
+}
+
+.tablecontainer{
+  display: inline-block;
+}
+
+.tablecontainer > a{
+  padding: 3px ;
+  
+}
+
+.tablecontainer > a:hover{
+  background-color:rgba(118, 199, 226, 0.952);
+  }
+
+
+.nodetext{
+  
+}
+
+.dropdowncontainer{
+ margin: 0 auto;
+  
+}
+
+.basecontainer{
+  margin: 1em;
+  
+}
+
+.basecontainer > mat-form-field{
+  margin: 1em;
+  padding: 5px;
+}
+
+.basecontainer > h3{
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+

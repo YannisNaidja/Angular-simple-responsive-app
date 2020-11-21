@@ -1,46 +1,72 @@
 <mat-card>
     <h1 class="title">Search a word</h1>
     <input type="text" value="" name="word" (input)="updateData($event.target.value)">
-    <button mat-raised-button type="button" color="accent" (click)="getRelationsType()">Search</button>
+    <button mat-raised-button type="button" color="primary" (click)="getRelationsType()">Search</button>
 
-    <div *ngIf = "ShowSelectRelation === true">
+   
 
-        <mat-form-field appearance="fill">
+<div class="basecontainer" *ngIf = "ShowSelectRelation === true" >
+  <mat-divider></mat-divider>
 
-            <mat-label>Choix du Type de Relation</mat-label>
-            <mat-select [(value)]="selectedValue">
-              <mat-option *ngFor="let relation of RelationsNames" [value]="relation.desc">
-                {{relation.desc}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <button mat-raised-button type="button" color="accent" (click)="getNodesOfARelation(selectedValue)">Get Data</button>
-          <p>Indication sur la relation :  {{selectedValue}}</p>
-
-          <div *ngIf="DataReady===false && GetDataClicked === true">
-            <mat-spinner ></mat-spinner>
-          </div>
-
-        </div>
-        
-            <table mat-table [dataSource]="tableDataSrc" *ngIf="DataReady===true">
-          
-              <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> Name </th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-              </ng-container>
-          
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-            </table>
-
-            <mat-paginator [pageSize]="30" [pageSizeOptions]="[10, 50, 100]" [length]="resultlength" ></mat-paginator>
-          
-
-</mat-card>
-
-<div *ngFor="let def of DefArray">
-    <p>{{def.value}}</p>
+  <div *ngIf = "ShowDefGenerale === true">
+    <h3 >Definition générale : {{DefGenerale}}</h3>
+  </div>
+  
+  <div *ngIf = "ShowRaffinements === true">
+    <h2  style="text-align: center;">Raffinements Sémantiques</h2>
+    <div class="defcontainer" *ngFor="let def of DefArray" >
+      <button mat-raised-button  style ="margin : 10px ;"type="button" color="primary"  (click)="showDef(def)">{{def.id}} </button>
+        <p style="text-align: center;" *ngIf="def.show===true">{{def.value}}</p>
+    </div>
+  </div>
+  
 </div>
+
+
+
+
+<div class="basecontainer" *ngIf = "ShowSelectRelation === true">
+
+  <mat-divider></mat-divider>
+
+  <mat-form-field appearance="fill">
+      <mat-label>Choix du Type de Relation</mat-label>
+      <mat-select [(value)]="selectedValue">
+        <mat-option *ngFor="let relation of RelationsNames" [value]="relation.desc">
+          {{relation.desc}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button type="button" color="primary" (click)="getNodesOfARelation(selectedValue)">Get Data</button>
+    <h3>Indication sur la relation :  {{selectedValue}}</h3>
+    <div *ngIf="DataReady===false && GetDataClicked === true">
+      <mat-spinner ></mat-spinner>
+    </div>
+  
+    <div class="tablecontainer"  *ngFor="let node of NodesOfARelation">
+      <a class="nodetext">{{node.name}} • </a>    
+      </div>
+  </div>
+
+
+  <!--
+    <div class="tablecontainer" >
+      <table mat-table [dataSource]="tableDataSrc" *ngIf="DataReady===true">
+    
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+ 
+
+      <mat-paginator [pageSize]="30" [pageSizeOptions]="[10, 50, 100]" [length]="resultlength" ></mat-paginator>
+
+    </div> 
+    --> 
+  </mat-card>    

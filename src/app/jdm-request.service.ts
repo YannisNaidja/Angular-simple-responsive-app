@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -53,4 +54,5 @@ export class JdmRequestService {
     getDef(word:string) : Observable<any>{
         return this.http.get(this.servUrl + "getDef/" + word );
     }
+   
 }
