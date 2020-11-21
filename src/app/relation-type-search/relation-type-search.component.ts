@@ -43,7 +43,7 @@ export class RelationTypeSearchComponent implements OnInit {
 
 
     tableDataSrc : any;
-    @ViewChild (MatPaginator, {static : false }) mypaginator : MatPaginator
+  
 
     
     
@@ -65,6 +65,7 @@ export class RelationTypeSearchComponent implements OnInit {
         this.word = this.word.replace(" ","+");
          // supporte les mot avec espaces
         this.DefArray= new Array();
+        this.NodesOfARelation = new Array();
         this.ShowDefGenerale=false;
         this.ShowRaffinements = false;
         this.jdmservice.getWordId(this.word).subscribe(IdData =>{
@@ -138,6 +139,7 @@ getNodesOfARelation(relationclicked){
             
 
             // choper les relations de cette idRelation
+            // renvoie on a le poid ici 
             this.jdmservice.getRelationsNodebyId(this.word,relationId).subscribe(data =>{
                 console.log("recu l'id " + relationclicked);
                 this.AssociatedRelations = data;
@@ -148,11 +150,20 @@ getNodesOfARelation(relationclicked){
                      if(relation.idRelationType===relationId){
                          var IdMot;
                          if(relation.idSource!=this.wordId){
-                             IdMot = relation.idSource;
-                             IdWordsToDisplay.push(IdMot);
+                            IdMot = relation.idSource;
+                             let node = {
+                                 id : relation.idSource,
+                                 poidRelation : relation.poidRelation
+                             }
+                             
+                             IdWordsToDisplay.push(node);
                          }else{
                              IdMot = relation.idTarget;
-                             IdWordsToDisplay.push(IdMot);
+                             let node = {
+                                id : relation.idTarget,
+                                poidRelation : relation.poidRelation
+                            }
+                             IdWordsToDisplay.push(node);
                          }
                          
                          
@@ -160,38 +171,42 @@ getNodesOfARelation(relationclicked){
                  }
                  console.log(IdWordsToDisplay.length+" id de noeuds on ete ajoutes ");
     
-    
+                // le poid est perdu ici car on retourne sur le tableau des noeud ou on ne renvoie que lid et le nom
                 // parcourir le tableau de tout les noeud et l ajouter a un tableau de nom pour le widget material 
                 for(var node of this.NodesOfThisWord)
-                    for(var id of IdWordsToDisplay){
-                        if(node.id === id){
+                    for(var word of IdWordsToDisplay){
+                        if(node.id === word.id && word.poidRelation > 0){
                            if(this.NodesOfARelation.includes(node.name)===false){
                                console.log("ajout de "+node.name)
-                               
-                                this.NodesOfARelation.push(node);   
+                               word.name = node.name;
+                                this.NodesOfARelation.push(word);   
                            }
                             
                         }
                     }
                     
+                    
                     console.log(this.NodesOfARelation.length+" mot sont contenus dans le tab");
                         this.resultlength = this.NodesOfARelation.length;
                    
                         this.DataReady = true;
-                        this.tableDataSrc = new MatTableDataSource(this.NodesOfARelation);
-                        this.tableDataSrc.paginator = this.mypaginator;
                         
                         console.log("data ready mis a true");
                         //virer les termes inintelligibles de jeux de mot
                         this.NodesOfARelation = this.NodesOfARelation.filter((item)=>{
-                            return !item.name.includes("::") && !item.name.includes(":?");
+                            return !item.name.includes("::") && !item.name.includes(":?")
+                            && item.poidRelation < 9999;
                         })
+                        this.NodesOfARelation.sort(function(a, b) {
+                            return b.poidRelation - a.poidRelation;
+                          }); 
+                        //this.NodesOfARelation.sort((a, b) => (a.poidRelation > b.poidRelation) ? 1 : -1);
                             
                 });
                 
             }
 
-            showDef(def){
+    showDef(def){
                 if(def.show===false){
                     console.log(def.value);
                     def.show=true;   
@@ -199,6 +214,20 @@ getNodesOfARelation(relationclicked){
                     def.show=false;
                 }
             }
+
+
+    getPoid(node){
+        console.log("poid du noeud: " +node.poidRelation);
+                
+    }
+            
+    getFontsize(node){
+        return 20 + Math.sqrt(node.poidRelation) ;   
+            
+    }
+    getFontcolor(node){
+        return node.poidRelation.toString(16);
+    }      
  
 }  
 

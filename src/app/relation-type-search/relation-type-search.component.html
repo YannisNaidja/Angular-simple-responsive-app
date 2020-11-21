@@ -45,7 +45,7 @@
     </div>
   
     <div class="tablecontainer"  *ngFor="let node of NodesOfARelation">
-      <a class="nodetext">{{node.name}} • </a>    
+      <a (click)="getPoid(node)" [ngStyle]="{'font-size': getFontsize(node)+'px'}">{{node.name}} • </a>    
       </div>
   </div>
 
