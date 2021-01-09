@@ -1,7 +1,7 @@
 
 
 const express = require('express');
-
+var port = process.env.PORT || 8888;
 
 const cors = require('cors');
 const http = require('http');
@@ -25,7 +25,7 @@ app.use(express.urlencoded({
   extended: true
 }));
 app.options('*', cors());
-app.listen(8888);
+app.listen(port);
 
 // les types de noeuds (Nodes Types) : nt;ntid;'ntname'
 // les noeuds/termes (Entries) : e;eid;'name';type;w;'formated name' 
