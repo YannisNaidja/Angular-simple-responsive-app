@@ -11,6 +11,8 @@ const NodeCache = require( "node-cache" );
 const myCache = new NodeCache({stdTTL: 100, checkperiod: 120});
 app.use(express.json());
 
+var distDir = __dirname + "/dist/";
+app.use(express.static(distDir));
 
 var corsOptions = {
   origin: 'http://localhost:4200',
