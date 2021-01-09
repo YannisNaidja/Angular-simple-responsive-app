@@ -29,6 +29,7 @@
     "mongodb": "^3.6.2",
     "node-cache": "^5.1.2",
     "rxjs": "~6.4.0",
+    "express": "^4.16.3",
     "shelljs": "^0.8.4",
     "treetagger": "^0.1.1",
     "tslib": "^1.10.0",
