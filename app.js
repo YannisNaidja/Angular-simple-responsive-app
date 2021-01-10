@@ -14,17 +14,19 @@ app.use(express.json());
 var distDir = __dirname + "/dist/";
 app.use(express.static(distDir));
 
-var corsOptions = {
+/*var corsOptions = {
   origin: 'http://localhost:4200',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+}*/
 
-app.use(express.urlencoded({
+/*app.use(express.urlencoded({
   extended: true
-}));
-app.options('*', cors());
+}));*/
+
+
+//app.options('*', cors());
 app.listen(port);
 
 // les types de noeuds (Nodes Types) : nt;ntid;'ntname'
