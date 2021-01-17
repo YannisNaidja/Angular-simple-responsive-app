@@ -2,8 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { JdmRequestService } from '../jdm-request.service';
 import {MatTableModule, MatTableDataSource} from '@angular/material/table';
 import { MatPaginator, matTooltipAnimations } from '@angular/material';
-import { mergeMap, switchMap } from 'rxjs/operators';
-import { of, from } from 'rxjs';
+import { mergeMap, switchMap, map, startWith } from 'rxjs/operators';
+import { of, from, Observable } from 'rxjs';
+import { FormControl } from '@angular/forms'
+
 
 
 
@@ -36,34 +38,45 @@ export class RelationTypeSearchComponent implements OnInit {
     private ShowDefGenerale : boolean = false;
     private ShowRaffinements : boolean = false;
     
-    
-
-
-    
-
+    private entries: any[] = new Array();
+    myControl = new FormControl();
+    filteredOptions: Observable<any[]>;
 
     tableDataSrc : any;
   
-
-    
-    
-    
-
     constructor(private jdmservice: JdmRequestService) { }
 
     ngOnInit() {
         
+       this.jdmservice.getEntries().subscribe(data =>{
+           this.entries = data;
+           this.filteredOptions = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this._filter(value))
+          )
+       });
     }
+
+    selection(selected) {
+        console.log(selected);
+        this.word = selected;
+      }
+
+    private _filter(value: string): string[] {
+        const filterValue = value.toLowerCase()
+        return this.entries.filter(option =>
+          option.toLowerCase().includes(filterValue)
+        )
+      }
 
     updateData(value) {
         this.word = value;
-
+        
         console.log(this.word);
     }
 
     getRelationsType() {
-        this.word = this.word.replace(" ","+");
-         // supporte les mot avec espaces
+            
         this.DefArray= new Array();
         this.NodesOfARelation = new Array();
         this.ShowDefGenerale=false;

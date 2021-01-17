@@ -17,6 +17,11 @@ mat-card > input {
     margin: auto;
     margin-top: 2em;
 }
+mat-card > form {
+  
+  margin: auto;
+  margin-top: 2em;
+}
 
 mat-card > button {
     max-width: fit-content;

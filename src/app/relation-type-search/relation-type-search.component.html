@@ -1,7 +1,16 @@
 <mat-card>
     <h1 class="title">Search a word</h1>
-    <input type="text" value="" name="word" (input)="updateData($event.target.value)">
-    <button mat-raised-button type="button" color="primary" (click)="getRelationsType()">Search</button>
+    <form>
+      <mat-form-field>
+      <input type="text" matInput value="" name="word" (input)="updateData($event.target.value)" [matAutocomplete]="auto" [formControl]="myControl">
+      <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of filteredOptions | async | slice : 0 : 10" [value]="option" (click)="selection(option)">
+            {{option}}
+          </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form> 
+  <button mat-raised-button type="button" color="primary" (click)="getRelationsType()">Search</button>
 
    
 
