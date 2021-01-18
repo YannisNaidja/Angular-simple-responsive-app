@@ -67,33 +67,31 @@ app.get("/getRelationType/:word", cors(corsOptions), (req, res) => {
 
 
         request("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
-            word + "&rel=?gotermsubmit=Chercher&gotermrel=" + word +
-            "&rel=", {
-            json: true
-        }, (err, res2, body) => {
-            if (err) {
-                return console.log(err);
-            }
-            // const regex = /((e;[0-9]+;.*)|(r;[0-9]+;.*))/m;
-            const regex = /(rt;[0-9]+;.*)/gm;
-            console.log(body.match(regex));
-            var relationstypes = body.match(regex);
-            var RelationsTypesArray = new Array();
-            for (var s of relationstypes) {
-                //console.log(s);
-                var relationtype = {
-                    id: s.split(";")[1],
-                    desc: s.split(";")[3],
-                    tips: s.split(";")[5]
-                };
-                var rez = s.split(";")[1] + " " + s.split(";")[3];
-                console.log(rez);
-                RelationsTypesArray.push(relationtype);
-            }
-
-
-            res.end(JSON.stringify(RelationsTypesArray));
-        });
+            word + "&rel=?gotermsubmit=Chercher&gotermrel=" + word + "&rel=",
+            { json: true }, (err, res2, body) => {
+                if (err) {
+                    return console.log(err);
+                }
+                // const regex = /((e;[0-9]+;.*)|(r;[0-9]+;.*))/m;
+                const regex = /(rt;[0-9]+;.*)/gm;
+                // console.log(body.match(regex));
+                var relationstypes = body.match(regex);
+                var RelationsTypesArray = new Array();
+                if (relationstypes) {
+                    for (var s of relationstypes) {
+                        //console.log(s);
+                        var relationtype = {
+                            id: s.split(";")[1],
+                            desc: s.split(";")[3],
+                            tips: s.split(";")[5]
+                        };
+                        var rez = s.split(";")[1] + " " + s.split(";")[3];
+                        // console.log(rez);
+                        RelationsTypesArray.push(relationtype);
+                    }
+                }
+                res.end(JSON.stringify(RelationsTypesArray));
+            });
     }
 });
 

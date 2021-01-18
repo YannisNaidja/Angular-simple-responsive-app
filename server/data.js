@@ -4,7 +4,7 @@ const fs = require("fs");
 const router = express.Router();
 
 router.get("", (req, res, next) => {
-    fs.readFile("assets/caches/entries.txt", "utf8", (err, data) => {
+    fs.readFile("server/assets/caches/entries.txt", "utf8", (err, data) => {
         if (err) {
             console.log(err);
             return;

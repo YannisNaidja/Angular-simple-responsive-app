@@ -1,8 +1,9 @@
+import { query } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { Subscription, Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, debounceTime } from 'rxjs/operators';
 import { DataService } from '../data.service';
 import { JdmRequestService } from '../jdm-request.service';
 
@@ -25,39 +26,59 @@ export class RelationTypeSearchComponent implements OnInit, OnDestroy {
     constructor(private jdmservice: JdmRequestService, private dataService: DataService) { }
 
     ngOnInit() {
+        console.log("whaaat ??");
+        
         this.dataSubscription = this.dataService.getEntries().subscribe(data => {
-            // this.entries = data;
-            console.log(data);
+            this.entries = data.entries;
+            console.log("data collected !");
+            console.log("1. " + this.entries[0]);
+            console.log("2. " + this.entries[1]);
         });
 
         this.searchedWord = this.searchQuery.valueChanges.pipe(
-            startWith(''),
-            map((value) => this._searchedWord(value))
+            startWith(""),
+            debounceTime(700),
+            map(value => this._searchedWord(value))
         );
     }
 
     private _searchedWord(value: string): string[] {
         const searchValue = value.toLowerCase();
 
-        return this.entries.filter(
-            (entrie) => entrie.toLowerCase().indexOf(searchValue) === 0
-        );
+
+        // console.log(searchValue);
+        // if (searchValue.length > 2) {
+            return this.entries
+                .filter(entrie => {
+                    return entrie.toLowerCase().indexOf(searchValue) === 0;
+                });
+                // .slice(1,20));
+        // }
+        return null;
     }
 
     updateData(value) {
-        this.word = value;
+        this.searchQuery.setValue(value);
         //console.log(this.sentence);
     }
 
     getRelationsType() {
 
         this.RelationsNames = new Array();
+        
+        query: String = this.searchQuery.value;
+        console.log("AAAh : " + query);
 
-        this.jdmservice.getRelationType(this.word).subscribe(data => {
-            this.RelationsNames = data;
-            console.log("data update");
-            //		
-        });
+        if (query.length > 3) {
+            this.jdmservice.getRelationType(this.searchQuery.value).subscribe(data => {
+                this.RelationsNames = data;
+                console.log("data update");
+                //		
+            });
+        }
+
+        console.log("EEEEHHH !!");
+        
     }
 
     ngOnDestroy(): void {

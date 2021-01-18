@@ -12,6 +12,8 @@ import { AngularMaterialModule } from './angular-material.module';
 import { AutoCompletionPipe } from './relation-type-search/auto-completion.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import {ScrollingModule} from '@angular/cdk/scrolling';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +27,8 @@ import { ReactiveFormsModule } from '@angular/forms';
       HttpClientModule,
       AppRoutingModule,
       ReactiveFormsModule,
-      AngularMaterialModule
+      AngularMaterialModule,
+      ScrollingModule
     ],
   providers: [JdmRequestService],
   bootstrap: [AppComponent]

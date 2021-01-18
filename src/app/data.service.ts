@@ -12,7 +12,7 @@ export class DataService {
 
     constructor(private httpClient: HttpClient, private router: Router) { }
 
-    getEntries(): Observable<string[]> {
-        return this.httpClient.get<string[]>(this.dataURL);
+    getEntries(): Observable<{ entries: string[] }> {
+        return this.httpClient.get<{ entries: string[] }>(this.dataURL);
     }
 }

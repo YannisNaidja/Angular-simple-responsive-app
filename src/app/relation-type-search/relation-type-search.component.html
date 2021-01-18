@@ -3,14 +3,15 @@
     <!-- <input type="text" value="" name="word" (input)="updateData($event.target.value)"> -->
 
     <div class="search-input">
-        <input matInput type="text" placeholder="Search a word" [formControl]="searchedWord" 
+        <input matInput type="text" placeholder="Search a word" [formControl]="searchQuery" 
             [matAutocomplete]="auto" />
         <mat-icon aria-hidden>search</mat-icon>
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-            <mat-option *ngFor="let word of searchedWord | async" [value]="word.title">
-                <img aria-hidden class="search-img" [src]="word.imagePath" height="30" />
-                <span>{{ word.title }}</span>
-            </mat-option>
+            <cdk-virtual-scroll-viewport itemSize="50" style="height: 256px;">
+                <mat-option *cdkVirtualFor="let word of searchedWord | async" [value]="word">
+                    <span>{{ word }}</span>
+                </mat-option>
+            </cdk-virtual-scroll-viewport>
         </mat-autocomplete>
     </div>
 
