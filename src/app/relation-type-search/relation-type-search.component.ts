@@ -47,7 +47,7 @@ export class RelationTypeSearchComponent implements OnInit {
     constructor(private jdmservice: JdmRequestService) { }
 
     ngOnInit() {
-        console.log("ng on init");
+       /* console.log("ng on init");
        this.jdmservice.getEntries().subscribe(data =>{
            
            this.entries = data;
@@ -56,7 +56,7 @@ export class RelationTypeSearchComponent implements OnInit {
             startWith(''),
             map(value => this._filter(value))
           )
-       });
+       });*/
     }
 
     selection(selected) {
