@@ -2,13 +2,14 @@
     <h1 class="title">Search a word</h1>
     <form>
       <mat-form-field>
-      <input type="text" matInput value="" name="word" (input)="updateData($event.target.value)" [matAutocomplete]="auto" [formControl]="myControl">
+      <input type="text" matInput value="" name="word" (input)="updateData($event.target.value)" >
+      <!-- [matAutocomplete]="auto" [formControl]="myControl" dans attrib de l input-->
       <!--<mat-autocomplete #auto="matAutocomplete">
           <mat-option *ngFor="let option of filteredOptions | async | slice : 0 : 10" [value]="option" (click)="selection(option)">
             {{option}}
           </mat-option>
-      </mat-autocomplete>
-    </mat-form-field> -->
+      </mat-autocomplete> -->
+    </mat-form-field> 
   </form> 
   <button mat-raised-button type="button" color="primary" (click)="getRelationsType()">Search</button>
 
