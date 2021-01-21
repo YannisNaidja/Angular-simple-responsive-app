@@ -2,8 +2,8 @@
   "name": "projet-e-app",
   "version": "0.0.0",
   "engines": {
-   "node": "12.x"
-   },
+    "node": "12.x"
+  },
   "scripts": {
     "ng": "ng",
     "start": "node app.js",
@@ -29,10 +29,10 @@
     "@angular/router": "~8.2.14",
     "component": "^1.1.0",
     "cors": "^2.8.5",
+    "express": "^4.16.3",
     "mongodb": "^3.6.2",
     "node-cache": "^5.1.2",
     "rxjs": "~6.4.0",
-    "express": "^4.16.3",
     "shelljs": "^0.8.4",
     "treetagger": "^0.1.1",
     "tslib": "^1.10.0",

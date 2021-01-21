@@ -36,6 +36,8 @@ app.listen(port);
 
 app.get("/jdmentries", cors(corsOptions), (req, res) => {
 
+  console.log("appel de jdmentries");
+
   fs.readFile("entreejdm.txt", "utf8", (err, data) => {
     if (err) {
         console.log(err);

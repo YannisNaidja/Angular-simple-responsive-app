@@ -47,9 +47,11 @@ export class RelationTypeSearchComponent implements OnInit {
     constructor(private jdmservice: JdmRequestService) { }
 
     ngOnInit() {
-        
+        console.log("ng on init");
        this.jdmservice.getEntries().subscribe(data =>{
+           
            this.entries = data;
+           console.log("autocomplete ready");
            this.filteredOptions = this.myControl.valueChanges.pipe(
             startWith(''),
             map(value => this._filter(value))
