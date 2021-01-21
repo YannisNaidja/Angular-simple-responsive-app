@@ -308,13 +308,13 @@ app.get("/getWordId/:word", cors(corsOptions), (req, res) => {
 
         let word = req.params.word;
         console.log("word recu dans getwordid: "+word);
-        let encodedword= word.replaceAll(" ","+")
+        let encodedword= word.replace(/ /g,"+")
         encodedword= escape(encodedword);
 
-        //encodedword = encodedword.replaceAll("%20"," ");
+
         console.log("encodedword de getword id vaut: "+encodedword);
         quotedword = "'"+word+"'";  
-        quotedword = quotedword.replaceAll("+"," ");
+        quotedword = quotedword.replace(/\+/g," ");
         
         console.log("quotedword de getwordid vaut " +quotedword);
 
@@ -351,7 +351,7 @@ app.get("/getWordId/:word", cors(corsOptions), (req, res) => {
 
         let word= escape(req.params.word);
         quotedword = "'"+word+"'";
-        quotedword = quotedword.replaceAll("+"," ");
+        quotedword = quotedword.replace(/\+/g," ");
         console.log("dans get wordrel1 recu:"+word);
         var id_key=word+"_getWordRel1";
 
@@ -396,10 +396,10 @@ app.get("/getWordId/:word", cors(corsOptions), (req, res) => {
 app.get("/getDef/:word", cors(corsOptions), (req, res) => {
 
     let encodedword = escape(req.params.word);
-    encodedword = encodedword.replaceAll("%20"," ");
+    encodedword = encodedword.replace(/%20/g," ");
     let word = req.params.word;
     quotedword = "'"+word+"'";
-    quotedword = quotedword.replaceAll("+"," ");
+    quotedword = quotedword.replace(/\+/g," ");
     console.log("dans getdef recu: "+encodedword);
     var id_key=word+"_getDef";
 

@@ -9,8 +9,8 @@ import { mergeMap } from 'rxjs/operators';
 })
 export class JdmRequestService {
 
-    //private servUrl = 'http://localhost:8888/';
-    private servUrl ='https://dry-hamlet-62981.herokuapp.com/';
+    private servUrl = 'http://localhost:8888/';
+    //private servUrl ='https://dry-hamlet-62981.herokuapp.com/';
 
     constructor(private http: HttpClient) { }
 
