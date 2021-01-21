@@ -8,7 +8,6 @@ import { FormControl } from '@angular/forms'
 
 
 
-
 @Component({
     selector: 'app-relation-type-search',
     templateUrl: './relation-type-search.component.html',
@@ -43,7 +42,8 @@ export class RelationTypeSearchComponent implements OnInit {
     filteredOptions: Observable<any[]>;
 
     tableDataSrc : any;
-  
+    
+
     constructor(private jdmservice: JdmRequestService) { }
 
     ngOnInit() {
