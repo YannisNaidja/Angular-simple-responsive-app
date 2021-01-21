@@ -60,7 +60,7 @@ export class RelationTypeSearchComponent implements OnInit {
     }
 
     selection(selected) {
-        console.log(selected);
+        console.log(selected+" est selectionne");
         this.word = selected;
       }
 
