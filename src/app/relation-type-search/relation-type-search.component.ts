@@ -76,22 +76,25 @@ export class RelationTypeSearchComponent implements OnInit {
     }
 
     getRelationsType() {
-            
+
+        
         this.DefArray= new Array();
         this.NodesOfARelation = new Array();
         this.ShowDefGenerale=false;
         this.ShowRaffinements = false;
+        //id du mot cherche
         this.jdmservice.getWordId(this.word).subscribe(IdData =>{
             this.wordId=IdData;
             console.log("id du mot reçu");
+            // recuperer les type de relations 
             this.jdmservice.getRelationType(this.word).subscribe(data => {
                 this.RelationsNames = data;
                 console.log("data update");
-
+                // recuperer tout les noeud associe au mot chercher
                 this.jdmservice.getNodes(this.word).subscribe(worddata =>{
                     this.NodesOfThisWord = worddata;
                     console.log("node tab update");
-
+                    // recuperer toutes les relations associes
                     this.jdmservice.getRelations(this.word).subscribe(relations =>{
                         this.Relations = relations;
                         this.ShowSelectRelation = true;
@@ -99,10 +102,11 @@ export class RelationTypeSearchComponent implements OnInit {
                         this.GetDataClicked = false;
                         this.ShowData = false;   
                         console.log("relation recup");
-
+                        // recuperer les raffinements (relations d'id 1)
                          this.jdmservice.getIdRaff(this.word).subscribe(raffdata =>{
                             this.RaffArray = raffdata;
                             console.log("raffinement recup");
+                            // recuperer une definition generale du mot 
                             this.jdmservice.getDef(this.word).subscribe(def =>{
                                 this.DefGenerale = def.value;
                                 console.log("la valeur de la def vaut "+this.DefGenerale+" de taille "+this.DefGenerale.length);
@@ -111,6 +115,7 @@ export class RelationTypeSearchComponent implements OnInit {
                                 }
                             })
                             
+                            //recuperer les raffinements et pour chaque raffinement avoir sa definition
                             from(this.RaffArray).pipe(
                                 mergeMap(param => {
                                 
@@ -123,6 +128,7 @@ export class RelationTypeSearchComponent implements OnInit {
                                if(val.value!==null){
                                 this.DefArray.push(val);
                                 this.ShowRaffinements=true;
+                                
                                }
                                 //console.log("node desc vaut "+ node.desc+" node value vaut "+node.value)
                                 

@@ -5,7 +5,7 @@ var port = process.env.PORT || 8888;
 
 const cors = require('cors');
 const http = require('http');
-
+const fs = require('fs');
 const app = express();
 const NodeCache = require( "node-cache" );
 const myCache = new NodeCache({stdTTL: 100, checkperiod: 120});
@@ -34,6 +34,32 @@ app.listen(port);
 // les relations sortantes : r;rid;node1;node2;type;w 
 // les relations entrantes : r;rid;node1;node2;type;w 
 
+app.get("/jdmentries", cors(corsOptions), (req, res) => {
+
+  fs.readFile("entreejdm.txt", "utf8", (err, data) => {
+    if (err) {
+        console.log(err);
+        return;
+    }
+
+    var re = new RegExp(";(.*);", "g");
+    
+    entries = data.match(re);
+    
+    entries.forEach((word, index, arr) => {
+        w = word.substring(1, word.length - 1);
+        arr[index] = w;
+    });
+
+  console.log(entries);
+
+  
+  //res.end("ok");
+  res.end(JSON.stringify(entries));
+
+  });
+});
+
 app.get("/getRelationType/:word", cors(corsOptions), (req, res) => {
 
     //check si dans le cache
@@ -42,9 +68,9 @@ app.get("/getRelationType/:word", cors(corsOptions), (req, res) => {
     // avoir les types de relations associees à un mot
 
     let word = escape(req.params.word);
-
+    
   
-    console.log(word);
+    console.log("dans getrelationtype recu: "+word);
 
     var id_key= word+"_getRelationType";
 
@@ -94,7 +120,7 @@ app.get("/getRelations/:word/", cors(corsOptions), (req, res) => {
   // avoir toutes les relations entrantes ou sortantes associées à ce mot 
 
   let word= escape(req.params.word);
-  
+  console.log("dans getrelation recu:"+word);
 
   var id_key= word+"_getRelations";
 
@@ -144,7 +170,7 @@ app.get("/getAssociatedNodes/:word/", cors(corsOptions), (req, res) => {
 
 
   let word = escape(req.params.word);
-  
+  console.log("dans getassociatednodes recu:"+word);  
 
   var id_key= word+"_getAssociatedNodes";
 
@@ -194,7 +220,7 @@ app.get("/getAssociatedNodeById/:word/:id", cors(corsOptions), (req, res) => {
 
   let word= escape(req.params.word);
   let id = req.params.id;
-  
+  console.log("dans getassociatednodebyid recu:"+word);
 
   http.get("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
       word + "&rel=36?gotermsubmit=Chercher&gotermrel=" + word +
@@ -231,7 +257,7 @@ app.get("/getAssociatedRelationsById/:word/:id", cors(corsOptions), (req, res) =
 
   let word= escape(req.params.word);
   let id = req.params.id;
- 
+  console.log("dans getasssociatedRelationsbyid recu: "+word);
 
   var id_key=word+"_"+id+"_getAssociatedRelationsById";
 
@@ -276,11 +302,18 @@ app.get("/getAssociatedRelationsById/:word/:id", cors(corsOptions), (req, res) =
 app.get("/getWordId/:word", cors(corsOptions), (req, res) => {
 
         let word = req.params.word;
-        let encodedword= escape(word);
-        
-        quotedword = "'"+encodedword+"'";
+        console.log("word recu dans getwordid: "+word);
+        let encodedword= word.replaceAll(" ","+")
+        encodedword= escape(encodedword);
 
-        console.log("dans word id reçu: " +encodedword);
+        //encodedword = encodedword.replaceAll("%20"," ");
+        console.log("encodedword de getword id vaut: "+encodedword);
+        quotedword = "'"+word+"'";  
+        quotedword = quotedword.replaceAll("+"," ");
+        
+        console.log("quotedword de getwordid vaut " +quotedword);
+
+
 
         http.get("http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=" +
       encodedword + "&rel=36?gotermsubmit=Chercher&gotermrel=" + encodedword +
@@ -313,7 +346,8 @@ app.get("/getWordId/:word", cors(corsOptions), (req, res) => {
 
         let word= escape(req.params.word);
         quotedword = "'"+word+"'";
-
+        quotedword = quotedword.replaceAll("+"," ");
+        console.log("dans get wordrel1 recu:"+word);
         var id_key=word+"_getWordRel1";
 
         if(myCache.has(id_key)){
@@ -357,9 +391,11 @@ app.get("/getWordId/:word", cors(corsOptions), (req, res) => {
 app.get("/getDef/:word", cors(corsOptions), (req, res) => {
 
     let encodedword = escape(req.params.word);
+    encodedword = encodedword.replaceAll("%20"," ");
     let word = req.params.word;
     quotedword = "'"+word+"'";
-
+    quotedword = quotedword.replaceAll("+"," ");
+    console.log("dans getdef recu: "+encodedword);
     var id_key=word+"_getDef";
 
     if(myCache.has(id_key)){

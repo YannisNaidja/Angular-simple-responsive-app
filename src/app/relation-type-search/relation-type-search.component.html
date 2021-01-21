@@ -12,8 +12,7 @@
   </form> 
   <button mat-raised-button type="button" color="primary" (click)="getRelationsType()">Search</button>
 
-   
-
+  
 <div class="basecontainer" *ngIf = "ShowSelectRelation === true" >
   <mat-divider></mat-divider>
 
@@ -31,9 +30,6 @@
   
 </div>
 
-
-
-
 <div class="basecontainer" *ngIf = "ShowSelectRelation === true">
 
   <mat-divider></mat-divider>
@@ -47,35 +43,15 @@
       </mat-select>
     </mat-form-field>
 
-    <button mat-raised-button type="button" color="primary" (click)="getNodesOfARelation(selectedValue)">Get Data</button>
-    <h3>Indication sur la relation :  {{selectedValue}}</h3>
+    <button mat-raised-button type="button" color="primary" (click)="getNodesOfARelation(selectedValue)">Afficher les données</button>
     <div *ngIf="DataReady===false && GetDataClicked === true">
       <mat-spinner ></mat-spinner>
     </div>
   
     <div class="tablecontainer"  *ngFor="let node of NodesOfARelation">
       <a (click)="getPoid(node)" [ngStyle]="{'font-size': getFontsize(node)+'px'}">{{node.name}} • </a>    
-      </div>
-  </div>
+    </div>
 
+</div>
 
-  <!--
-    <div class="tablecontainer" >
-      <table mat-table [dataSource]="tableDataSrc" *ngIf="DataReady===true">
-    
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-    
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-      </table>
- 
-
-      <mat-paginator [pageSize]="30" [pageSizeOptions]="[10, 50, 100]" [length]="resultlength" ></mat-paginator>
-
-    </div> 
-    --> 
-  </mat-card>    
+</mat-card>    
