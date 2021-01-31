@@ -1,58 +1,68 @@
-<mat-card>
-    <h1 class="title">Search a word</h1>
-    <form>
-      <mat-form-field>
-      <input type="text" matInput value="" name="word" (input)="updateData($event.target.value)" >
-      <!-- [matAutocomplete]="auto" [formControl]="myControl" dans attrib de l input-->
-      <!--<mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let option of filteredOptions | async | slice : 0 : 10" [value]="option" (click)="selection(option)">
-            {{option}}
-          </mat-option>
-      </mat-autocomplete> -->
-    </mat-form-field> 
-  </form> 
-  <button mat-raised-button type="button" color="primary" (click)="getRelationsType()">Search</button>
+<mat-card class="search-input">
+    <h1 class="title">Quel mot souhaitez-vous rechercher ?</h1>
+    <form class="input-form">
+        <mat-form-field>
+            <input type="text" matInput value="" name="word" placeholder="Saisir un mot"
+                [matAutocomplete]="auto" [formControl]="wordQuery">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let word of wordOptions | async" [value]="word" (click)="selection(word)">
+                    {{ word }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <button mat-raised-button type="submit" color="primary" (click)="getRelationsType()">Rechercher</button>
+    </form>
+</mat-card>
 
-  
-<div class="basecontainer" *ngIf = "ShowSelectRelation === true" >
-  <mat-divider></mat-divider>
-
-  <div *ngIf = "ShowDefGenerale === true">
-    <h3 >Definition générale : {{DefGenerale}}</h3>
-  </div>
-  
-  <div *ngIf = "ShowRaffinements === true">
-    <h2  style="text-align: center;">Raffinements Sémantiques</h2>
-    <div class="defcontainer" *ngFor="let def of DefArray" >
-      <button mat-raised-button  style ="margin : 10px ;"type="button" color="primary"  (click)="showDef(def)">{{def.id}} </button>
-        <p style="text-align: center;" *ngIf="def.show===true">{{def.value}}</p>
+<div class="basecontainer" *ngIf="ShowSelectRelation === true">
+    <div *ngIf="ShowDefGenerale === false && LoadingData === true">
+        <mat-spinner></mat-spinner>
     </div>
-  </div>
-  
+    <mat-expansion-panel>
+        <mat-expansion-panel-header *ngIf="ShowDefGenerale === true">
+            <span class="panel-header">Definition générale</span>
+        </mat-expansion-panel-header>
+        <p style="white-space:pre-wrap;">{{ DefGenerale }}</p>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header *ngIf="ShowRaffinements === true">
+            <span class="panel-header">Raffinements Sémantiques</span>
+        </mat-expansion-panel-header>
+        <div class="defcontainer">
+            <div *ngFor="let def of DefArray">
+                <button mat-raised-button style="margin : 10px ;" type="button" color="primary"
+                    (click)="showDef(def)">{{def.id}} </button>
+                <p style="text-align: center;" *ngIf="def.show===true">{{def.value}}</p>
+            </div>
+        </div>
+    </mat-expansion-panel>
+
+    <mat-card>
+        <div class="relation-container" *ngIf="ShowSelectRelation === true">
+            <mat-form-field style="width: 400px;" appearance="fill">
+                <mat-label>Choix du Type de Relation</mat-label>
+                <mat-select [(value)]="selectedValue">
+                    <mat-option *ngFor="let relation of RelationsNames" [value]="relation.desc">
+                        {{relation.desc}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button mat-raised-button type="button" color="primary"
+                (click)="getNodesOfARelation(selectedValue)">
+                Afficher les données
+            </button>
+                
+            <div class="table-container">
+                <div *ngIf="DataReady===false && GetDataClicked === true">
+                    <mat-spinner></mat-spinner>
+                </div>
+                
+                <div *ngFor="let node of NodesOfARelation">
+                    <a (click)="getPoid(node)" [ngStyle]="{'font-size': getFontsize(node)+'px'}">{{ node.name }} • </a>
+                </div>
+            </div>
+        </div>
+    </mat-card>
 </div>
-
-<div class="basecontainer" *ngIf = "ShowSelectRelation === true">
-
-  <mat-divider></mat-divider>
-
-  <mat-form-field appearance="fill">
-      <mat-label>Choix du Type de Relation</mat-label>
-      <mat-select [(value)]="selectedValue">
-        <mat-option *ngFor="let relation of RelationsNames" [value]="relation.desc">
-          {{relation.desc}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <button mat-raised-button type="button" color="primary" (click)="getNodesOfARelation(selectedValue)">Afficher les données</button>
-    <div *ngIf="DataReady===false && GetDataClicked === true">
-      <mat-spinner ></mat-spinner>
-    </div>
-  
-    <div class="tablecontainer"  *ngFor="let node of NodesOfARelation">
-      <a (click)="getPoid(node)" [ngStyle]="{'font-size': getFontsize(node)+'px'}">{{node.name}} • </a>    
-    </div>
-
-</div>
-
-</mat-card>    

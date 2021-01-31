@@ -1,27 +1,23 @@
-# ProjetEApp
+# Projet Responsive
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.24.
+## Informations
 
-## Development server
+Le développement de cette application a été effectué avec **Angular** pour le côté client et **NodeJS** pour le serveur.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Version locale
 
-## Code scaffolding
+> projet téléchargeable sur le git suivant : https://github.com/YannisNaidja/projet-e-app
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+1. Se positionner sur la racine du projet
+2. Exécuter la commande **npm init** pour récupérer les dépendances de lancement du serveur
+3. Exécuter la commande **node app.js** permet de lancer le serveur
+4. Exécuter la commande **ng serve** permet de lancer l'application cliente. 
+5. Le lancement de l'application se fera sur http://127.0.0.1:4200/
 
-## Build
+## Version en ligne
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Vous trouverez le projet en ligne sur l'adresse suivante : http://217.182.170.118:8888/
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+----------
+##### **Etudiants** Yannis Naidja & Emile Youssef
+##### **Enseignant** Mathieu Lafourcade

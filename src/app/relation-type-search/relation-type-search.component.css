@@ -1,37 +1,44 @@
-
 mat-card {
-    display: flex;
-    flex-flow: column;
+  display: flex;
+  flex-flow: column;
+  margin: auto;
+  margin-top: 2em;
+  text-align: center;
+}
+
+.search-input {
     width: 80%;
-    margin: auto;
-    margin-top: 1em;
 }
 
 h1.title {
-    margin: auto;
-    margin-top: 1em;
+  margin: auto;
+  margin-top: 1em;
 }
 
 mat-card > input {
-    width: 80%;
-    margin: auto;
-    margin-top: 2em;
+  width: 80%;
+  margin: auto;
+  margin-top: 2em;
 }
 mat-card > form {
-  
   margin: auto;
   margin-top: 2em;
 }
 
 mat-card > button {
-    max-width: fit-content;
-    min-width: 4em;
-    margin: auto;
-    margin-top: 1em;
+  max-width: fit-content;
+  min-width: 4em;
+  margin: auto;
+  margin-top: 1em;
 }
 
-
 /* Structure */
+.input-form {
+    display: grid;
+    width: 50%;
+    padding-bottom: 20px;
+}
+
 .example-container {
   position: relative;
   min-height: 200px;
@@ -76,53 +83,77 @@ table {
   max-width: 124px;
 }
 
-
-.defcontainer > p{
-  
-}
-
-.defbtnlist{
+.defbtnlist {
   display: inline;
 }
 
-.defitem{
+.defitem {
   text-decoration: none;
   display: inline-block;
 }
 
-.tablecontainer{
-  display: inline-block;
+.table-container {
+    padding-top: 3rem;
+    text-align: center;
 }
 
-.tablecontainer > a{
-  padding: 3px ;
-  
+.table-container > div{
+    display: inline-block;
 }
 
-.tablecontainer > a:hover{
-  background-color:rgba(118, 199, 226, 0.952);
-  }
-
-
-
-.dropdowncontainer{
- margin: 0 auto;
-  
+.table-container > div > a {
+  padding: 3px;
 }
 
-.basecontainer{
-  margin: 1em;
-  
+.table-container > div > a:hover {
+  background-color: rgba(118, 199, 226, 0.952);
 }
 
-.basecontainer > mat-form-field{
-  margin: 1em;
+.dropdowncontainer {
+  margin: 0 auto;
+}
+
+.basecontainer {
+  padding: 16px;
+  width: 82%;
+  margin: 0 auto;
+}
+
+.basecontainer > mat-form-field {
   padding: 5px;
 }
 
-.basecontainer > h3{
+.basecontainer > h3 {
   margin-top: 0;
   margin-bottom: 1em;
 }
 
+.basecontainer > mat-expansion-panel-header {
+  text-align: center;
+  font-weight: 400;
+  font-size: medium;
+  margin: 0 auto;
+}
 
+.panel-header {
+  font-weight: 500;
+  font-size: x-large;
+  margin: 0 auto;
+}
+
+.defcontainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.relation-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+}
+
+.relation-container > button{
+    height: 3rem;
+}

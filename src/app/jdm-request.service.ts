@@ -1,23 +1,35 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
 export class JdmRequestService {
 
-    //private servUrl = 'http://localhost:8888/';
-    private servUrl ='https://dry-hamlet-62981.herokuapp.com/';
+    private servUrl = 'http://localhost:8888/';
+    // private servUrl ='http://217.182.170.118:8888/';
+
+    private entries: Observable<any>;
+    private entriesLoaded: boolean = false;
 
     constructor(private http: HttpClient) { }
 
     // tous les types de relations pour ce mot
 
-    getEntries(): Observable<any>{
-        return this.http.get(this.servUrl + "jdmentries");
+    getEntries(): any {
+        if (this.entries) return this.entries;
+
+        this.entries = this.http.get(this.servUrl + "jdmentries").pipe(
+            shareReplay(1),
+        );
+                
+        return this.entries;
+    }
+
+    getDataAvailability(): boolean {
+        return this.entriesLoaded;
     }
 
     getRelationType(word: string): Observable<any> {
